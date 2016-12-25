@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>获取微博信息</title>
+	<style>
+		.datalist{margin:0 auto;line-height:2;}
+		.datalist li{position:relative;border-bottom:1px dotted #ddd;padding-right:100px;}
+		.datalist li span{position:absolute;right:0;top:0;margin:0 5px;padding:2px 5px;background-color:skyblue;border-radius: 5px;width:30px;text-align:center;color:#fff;}
+		.datalist li span.like{right:50px;background-color:orange;}
+	</style>
+	<script>
+		var xhr = new XMLHttpRequest();
+
+		// 接收数据
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4 && xhr.status === 200){
+				var res = JSON.parse(xhr.responseText);
+				console.log(res);
+
+				// 遍历数据，并写入页面
+				var ul = document.createElement('ul');
+				ul.className = 'datalist';
+				for(var i=0;i<res.length;i++){
+					var li = document.createElement('li');
+					li.innerHTML = '<h4>' + res[i].username + '</h4><p>' + res[i].content + '</p><span>' + res[i].comtcnt + '</span><span class="like">' + res[i].likecnt + '</span>';
+					ul.appendChild(li);
+				}
+
+				// 写入页面
+				document.body.appendChild(ul)
+			}
+		}
+
+		// 建立连接
+		xhr.open('get','http://localhost:3000/ajax/weibo',true);
+
+		// 发送
+		xhr.send();
+	</script>
+</head>
+<body>
+	
+</body>
+</html>

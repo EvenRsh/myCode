@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title>selectCity</title>
+		<style>
+			select {
+				width: 100px;
+				height: 20px;
+			}
+		</style>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			window.onload = function() {
+				function getCity(responseText) {
+					//获取了数据
+					var res = JSON.parse(responseText);
+					//						console.log(res);
+					//获取一级城市节点
+					var first = document.getElementById("first");
+					//处理一级城市的名单
+					var regions = res.regions; //数组
+					regions.forEach(function(item) {
+						//					console.log(item.name);
+						createOpt(item, 'name', first)
+								//处理二级城市
+							var secend = document.getElementById("secend");
+							//判断是否存在二级城市
+							if (item.regions) {
+								var regions = item.regions; //数组
+								regions.forEach(function(item) {
+									//						console.log(item.name);
+									createOpt(item, 'name', secend)
+										//处理三级城市
+									var third = document.getElementById("third");
+									//判断是否存在三级城市
+									if (item.regions) {
+										var regions = item.regions; //数组
+										regions.forEach(function(item) {
+											createOpt(item, 'name', third);
+										})
+									}
+								})
+							}
+					})
+
+				}
+
+				var box = document.getElementById("box");
+				box.onclick = function(e) {
+					e = e || window.event;
+					var target = e.target || e.srcElement;
+					if (target.id.toLocaleLowerCase() === 'first') {
+						//获取了当前的输入框的城市
+						console.log(target.value);
+
+						function getCity(responseText) {
+							//获取了数据
+							var res = JSON.parse(responseText);
+							console.log(res);
+							var secend = target.nextElementSibling;
+							var regions = res.regions;
+							regions.forEach(function(item) {
+								if (item.name === target.value) {
+									var regions = item.regions;
+									console.log(regions);
+									secend.innerHTML = '';
+									regions.forEach(function(item) {
+										console.log(item.name);
+										createOpt(item, 'name', secend);
+									})
+
+								}
+							})
+						}
+					}
+					else if(target.id.toLocaleLowerCase() === 'secend'){
+						console.log(target.value);
+
+						function getCity(responseText) {
+							//获取了数据
+							var res = JSON.parse(responseText);
+							console.log(res);
+							var secend = target.nextElementSibling;
+							var regions = res.regions;
+							regions.forEach(function(item) {
+								var regions = item.regions;
+//								console.log(regions);
+									regions.forEach(function(item) {
+										var regions = item.regions;
+										if (item.name === target.value) {
+											var third = target.nextElementSibling;
+											third.innerHTML = '';
+										regions.forEach(function(item) {
+											console.log(item);
+											createOpt(item, 'name', third);
+
+										})
+									}
+									})
+							})
+						}
+					}
+					else {
+						return
+					}
+					
+//					console.log(item.name);
+//					createOpt(item, 'name', secend);
+					
+					
+					
+					
+					ajax({
+						url: 'http://localhost:3000/data/region.json',
+						type: 'get',
+						async: 'true',
+						callback: getCity
+					});
+				}
+				ajax({
+					url: 'http://localhost:3000/data/region.json',
+					type: 'get',
+					async: 'true',
+					callback: getCity
+				});
+
+				function createOpt(item, type, parent) {
+					var option = document.createElement("option");
+					option.value = item[type];
+					option.innerHTML = item[type];
+					parent.appendChild(option);
+				}
+			}
+		</script>
+	</head>
+
+	<body>
+		<div id="box">
+
+			<select name="" id='first'>
+		</select>
+			<select name="" id='secend'>
+		</select>
+			<select name="" id='third'>
+		</select>
+		</div>
+	</body>
+
+</html>

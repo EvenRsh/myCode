@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>足球解说</title>
+	<style>
+		body{padding:50px;}
+		ul{list-style: none;padding:0;margin:0;}/*reset*/
+		#datalist{border:1px solid #ddd;padding:15px;}
+		#datalist li{padding:15px 5px;border-bottom:1px dotted #ccc;}
+		#datalist li h4{margin:0;}
+		#page span{display:inline-block;margin:5px;width:40px;line-height:1.8;text-align: center;background-color:#dfdfdf;color:#666;}
+		#page span.active{background-color:#fc0;color:#fff;}
+	</style>
+	<script src="js/common.js" type="text/javascript" charset="utf-8"></script>
+	<script>
+	window.onload = function(){
+		var datalist = document.getElementById('datalist');
+		var page = document.getElementById('page');
+
+/*		var xhr = new XMLHttpRequest();
+
+		// 接收数据
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4 && xhr.status === 200){
+				var res = JSON.parse(xhr.responseText);
+				// var res = eval("(" + xhr.responseText + ")");//兼容IE8-
+				console.log(res)
+
+				// 创建一个ul
+				var ul = document.createElement('ul');
+				for(var i=0;i<res.data.length;i++){
+					var li = document.createElement('li');
+					li.innerHTML = '<h4>' + res.data[i].name + '</h4><p>' + res.data[i].content + '</p>';
+
+					ul.appendChild(li);
+				}
+
+				
+				// 写入页面,写入前先清空
+				datalist.innerHTML = '';
+				datalist.appendChild(ul);
+
+				// 分页处理
+				var pageLen = Math.ceil(res.total/res.pageCount);
+
+				// 写入前先清空
+				page.innerHTML = '';
+
+				for(var i=1;i<=pageLen;i++){
+					var span = document.createElement('span');
+
+					// 页码高亮效果
+					if(res.pageNo == i){
+						span.className = 'active';
+					}
+
+					span.innerHTML = i;
+
+					// 写入分页
+					
+					page.appendChild(span);
+				}
+
+			}
+		}
+
+		xhr.open('get','http://localhost:3000/ajax/football?pageNo=1',true);
+
+		xhr.send();*/
+		
+		var opt = {type:'get',URL:"http://localhost:3000/ajax/football?pageNo=1",async:'true',callback:callback};
+		ajax(opt);
+		function callback(responseText){
+			var res = JSON.parse(responseText);
+				// var res = eval("(" + xhr.responseText + ")");//兼容IE8-
+//				console.log(res)
+
+				// 创建一个ul
+				var ul = document.createElement('ul');
+				for(var i=0;i<res.data.length;i++){
+					var li = document.createElement('li');
+					li.innerHTML = '<h4>' + res.data[i].name + '</h4><p>' + res.data[i].content + '</p>';
+
+					ul.appendChild(li);
+				}
+
+				
+				// 写入页面,写入前先清空
+				datalist.innerHTML = '';
+				datalist.appendChild(ul);
+
+				// 分页处理
+				var pageLen = Math.ceil(res.total/res.pageCount);
+
+				// 写入前先清空
+				page.innerHTML = '';
+
+				for(var i=1;i<=pageLen;i++){
+					var span = document.createElement('span');
+
+					// 页码高亮效果
+					if(res.pageNo == i){
+						span.className = 'active';
+					}
+
+					span.innerHTML = i;
+
+					// 写入分页
+					
+					page.appendChild(span);
+				}
+		}
+		// 点击分页请求不同数据
+		page.onclick = function(e){
+			e = e || window.event;
+			var target = e.target || e.srcElement;
+			if(target.tagName.toLowerCase() === 'span' && target.className != 'active'){
+				/*xhr.open('get','http://localhost:3000/ajax/football?pageNo=' + target.innerHTML,true);
+				xhr.send();*/
+				ajax({type:'get',URL:'http://localhost:3000/ajax/football?pageNo=' + target.innerHTML,async:'true',callback:callback});
+			}
+
+		}
+
+	}
+		
+	</script>
+</head>
+<body>
+	<h1>足球解说</h1>
+	<div id="datalist"></div>
+	<div id="page"></div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>获取天气预报</title>
+	<style>
+		body{font-family:'微软雅黑';}
+		ul{list-style: none;padding:0;margin:0;}
+		#weather{border:1px solid #ddd;padding:10px;font-size:12px;}
+		#weather h1 small{display: block;font-size:16px;margin:5px 0;font-weight:normal;color:#c00;}
+		#weather ul{padding:5px;overflow:hidden;}
+		#weather li{float:left;padding:5px;width:143px;height:200px;border-right:1px dotted #ddd;}
+		#weather li.last{border-right:none;float:right;}
+		#weather .date{padding-bottom:10px;margin-bottom:10px;text-align:center;font-weight:bold;border-bottom:1px dotted #ddd;}
+		
+		.type{height:70px;}
+		.qt{background:url(tianqi/1.png) no-repeat center;}
+		.zhenyu{background:url(tianqi/10.png) no-repeat center;}
+		.duoyun{background:url(tianqi/3.png) no-repeat center;}
+		.by{background:url(tianqi/12.png) no-repeat center;}
+		.zy{background:url(tianqi/10.png) no-repeat center;}
+		.xy{background:url(tianqi/9.png) no-repeat center;}
+		.leiyu{background: url(tianqi/16.png) no-repeat center;}
+		.dayu{background: url(tianqi/11.png) no-repeat center;}
+	</style>
+	<script>
+		/*
+			1、声明一个全局函数
+				getWeather(){}
+			2、创建script标签，并添加src属性
+				* 写入接口地址：http://wthrcdn.etouch.cn/weather_mini?city=北京
+				* 把srcript写入head
+		 */
+		function getWeather(res){
+			var weather = document.getElementById('weather');
+			console.log(res);
+			// 数据遍历方法
+			// forEach(fn)：ES5的数组方法
+			// fn参数：
+			// item,idx,arr
+
+			/*// for版本
+			for(var i=0;i<res.data.forecast.length;i++){
+				res.data.forecast[i]
+			}*/
+
+			// 标题
+			var city = document.createElement('h1');
+			city.innerHTML = res.data.city + '未来5天天气预报';
+			var p = document.createElement('p');
+			p.innerHTML = res.data.ganmao;
+			weather.appendChild(city);
+			weather.appendChild(p);
+
+
+			// forEach版本
+			var ul = document.createElement('ul');
+			res.data.forecast.forEach(function(item,idx,arr){
+				/*
+					item: res.data.forecast[i]
+					idx: i
+					arr: res.data.forecast
+				 */
+				
+				 var li = document.createElement('li');
+				 li.innerHTML = '<h4 class="date">' + item.date + '</h4><p class="type">' + item.type + '</p><p>' + item.low + '/' + item.high + '</p>';
+
+				 ul.appendChild(li);
+				 
+				 weather.appendChild(ul);
+			});
+
+		}
+
+		window.onload = function(){
+			var script = document.createElement('script');
+			script.src = 'http://wthrcdn.etouch.cn/weather_mini?city=广州&callback=getWeather';
+			document.head.appendChild(script);
+		}
+	</script>
+</head>
+<body>
+	<input type="text" id="city"><button>查看天气</button>
+	<div id="weather">
+		
+	</div>
+</body>
+</html>

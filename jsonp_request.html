@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jsonp请求</title>
+	<script>
+		/*// JSONP的工作原理
+			1、声明一个<全局函数>
+			2、把<函数名>传给其他服务器
+			3、其他服务接收到函数名后，返回一段js代码（调用这个函数，并把数据传给这个函数）
+		*/
+
+		function getData(data){
+			console.log(data);//
+			document.body.innerHTML = JSON.stringify(data);
+		}
+
+		// 创建一个script标签
+		var script = document.createElement('script');
+		script.src = 'http://localhost:3001/ajax/getJSONP?callback=getData';
+
+		// 写入页面
+		document.head.appendChild(script);
+	</script>
+
+</head>
+<body>
+	
+</body>
+</html>

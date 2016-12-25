@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style>
+		body{font-family:'微软雅黑';}
+		ul{list-style: none;padding:0;margin:0;}
+		#weather{border:1px solid #ddd;padding:10px;font-size:12px;}
+		#weather h1 small{display: block;font-size:16px;margin:5px 0;font-weight:normal;color:#c00;}
+		#weather ul{padding:5px;overflow:hidden;}
+		#weather li{float:left;padding:5px;width:143px;height:200px;border-right:1px dotted #ddd;}
+		#weather li.last{border-right:none;float:right;}
+		#weather .date{padding-bottom:10px;margin-bottom:10px;text-align:center;font-weight:bold;border-bottom:1px dotted #ddd;}
+		
+		.type{height:70px;}
+		.qt{background:url(tianqi/1.png) no-repeat center;}
+		.zhenyu{background:url(tianqi/10.png) no-repeat center;}
+		.duoyun{background:url(tianqi/3.png) no-repeat center;}
+		.by{background:url(tianqi/12.png) no-repeat center;}
+		.zy{background:url(tianqi/10.png) no-repeat center;}
+		.xy{background:url(tianqi/9.png) no-repeat center;}
+		.leiyu{background: url(tianqi/16.png) no-repeat center;}
+		.dayu{background: url(tianqi/11.png) no-repeat center;}
+		</style>
+		<script src="js/common.js" type="text/javascript" charset="utf-8"></script>	
+		<script>
+			/*
+			1、声明一个全局函数
+				getWeather(){}
+			2、创建script标签，并添加src属性
+				* 写入接口地址：http://wthrcdn.etouch.cn/weather_mini?city=北京
+				* 把srcript写入head
+		 	*/
+		 	function getWeather(res){
+			 	var weather = document.getElementById("weather");
+		 		console.log(res);
+			 	//写入之前先清空
+			 	weather.innerHTML = '';
+		 		var h1 = document.createElement("h1");
+		 		h1.innerHTML = res.data.city + ',未来五天的天气预报';
+		 		weather.appendChild(h1);
+		 		//forEach
+		 		var ul = document.createElement("ul");
+		 		res.data.forecast.forEach(function(itme,idx){
+		 			console.log(itme,idx);
+		 			var li = document.createElement("li")
+		 			var type;
+		 			switch(itme.type){
+		 				case '多云': type = 'duoyun';break;
+						case '阴' : type = 'yt';break;
+						case '晴' : type = 'qt';break;
+						case '小雨' : type = 'xy';break;
+						case '阵雨' : type = 'zy';break;
+		 			}
+		 			li.innerHTML = '<h4 class="date">' + itme.date + '</h4><p class = "type ' + type +'\">'+ itme.type + '</p><p>' + itme.high + '/' + itme.low + '</p>'
+		 			ul.appendChild(li);
+		 		})
+		 		weather.appendChild(ul);
+		 	}
+		 	
+		 	
+		 	window.onload = function(){
+			 	var script = document.createElement("script");
+			 	script.src = "http://wthrcdn.etouch.cn/weather_mini?city=广州&callback=getWeather";
+			 	document.head.appendChild(script);
+			 	
+			 	var city = document.getElementById("city");
+			 	var btn = city.nextElementSibling;
+		 		
+		 		btn.onclick = function(){
+		 			var _city = city.value.trim();
+		 			if(_city  === ""){
+		 				alert('输入不对');
+		 				return;
+		 			}
+//		 			var script = document.createElement("script");
+//			 		script.src = "http://wthrcdn.etouch.cn/weather_mini?city="+ _city  +"&callback=getWeather";
+//			 		document.head.appendChild(script);
+					jsonp({url:"http://wthrcdn.etouch.cn/weather_mini",data:{city:_city},callback:"getWeather"});
+		 		}
+		 	}
+		 	
+		 	
+		</script>
+	</head>
+	<body>
+		<input type="text" id="city"><button>查看天气</button>
+		<div id="weather">
+		
+		</div>
+	</body>
+</html>

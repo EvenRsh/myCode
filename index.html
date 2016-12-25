@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<script>
+		/* 
+		发起一个ajax请求
+			1、创建XMLHttpRequest对象
+				var xhr = new XMLHttpRequest()
+			4、接收数据
+				xhr.onreadystatechange = function(){}
+			2、建立于服务器的连接
+				xhr.open(type,API地址,async)
+				* API: aplication programming interface
+				* 后端定义的数据请求地址
+			3、发送请求
+				xhr.send()
+
+
+		*/
+	
+		var xhr = new XMLHttpRequest();//返回一个对象
+		console.log(xhr);
+
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4){
+				var p = document.createElement('p');
+				p.innerHTML = xhr.responseText;
+				document.body.appendChild(p);
+			}
+//			 console.log(xhr.readyState,xhr.responseText);
+		}
+
+		// 
+		xhr.open('get','http://localhost:3000/ajax/ajaxtest',true);
+
+
+		xhr.send();
+	</script>
+</head>
+<body>
+	<h1>我的主页，我做主</h1>
+</body>
+</html>

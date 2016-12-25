@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>足球解说</title>
+	<style>
+	body{padding:50px;}
+		ul{list-style: none;padding:0;margin:0;}/*reset*/
+		#datalist{border:1px solid #ddd;padding:15px;}
+		#datalist li{padding:15px 5px;border-bottom:1px dotted #ccc;}
+		#datalist li h4{margin:0;}
+		#page span{display:inline-block;margin:5px;width:40px;line-height:1.8;text-align: center;background-color:#dfdfdf;color:#666;}
+		#page span.active{background-color:#fc0;color:#fff;}
+	</style>
+	<script>
+		/*
+			足球解说
+				1）创建xhr对象
+				2）建立连接（配置参数）
+					传递分页参数
+				3）发送请求
+				4）处理数据
+				5）滚动加载下一页
+					* 滚动快到底部时加载下一页数据
+		 */
+		window.onload = function(){
+			// 获取页面元素
+			var datalist = document.getElementById('datalist');
+			var page = document.getElementById('page');
+
+
+			var pageNo = 1;
+			var pageLen;
+
+			// 1）创建xhr对象
+			var xhr = new XMLHttpRequest();
+
+			// 4）处理数据
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					var res = JSON.parse(xhr.responseText);
+
+					pageLen = Math.ceil(res.total/res.pageCount);
+
+					var ul = document.createElement('ul');
+					res.data.forEach(function(item){
+						var li = document.createElement('li');
+						li.innerHTML = '<h4>' + item.name + '：</h4>' + item.content;
+						ul.appendChild(li);
+					});
+
+					// 把数据写入页面
+					datalist.appendChild(ul);
+				}
+			}
+
+			// 2）建立连接（配置参数）
+			xhr.open('get','http://localhost:3000/ajax/football?pageNo=' + pageNo,true);
+
+			// 3）发送请求
+			xhr.send(null);
+
+
+			// 5）滚动加载下一页
+			window.onscroll = function(){
+				// 获取滚动条滚动过的距离
+				var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+				// var scrollTop = window.scrollY
+
+				// 判断快到底部的条件
+				if(scrollTop >= document.documentElement.offsetHeight - window.innerHeight - 50){
+					pageNo++;
+					console.log(pageNo);
+					if(pageNo <= pageLen){
+						// 2）建立连接（配置参数）
+						xhr.open('get','http://localhost:3000/ajax/football?pageNo='+pageNo,true);
+
+						// 3）发送请求
+						xhr.send(null);
+					}
+					
+				}
+			}
+		}
+
+	</script>
+</head>
+<body>
+	<h1>足球直播室（央视解说员共聚一堂）</h1>
+	<div id="datalist"></div>
+</body>
+</html>

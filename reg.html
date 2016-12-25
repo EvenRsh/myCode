@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>判断用户名是否被注册</title>
+	<style>
+		.success{color:#0c0;}
+		.error{color:#f00;}
+	</style>
+	<script>
+		window.onload = function(){
+			/*
+				失去焦点是发送ajax请求，判断用户名是否存在
+			 */
+			var username = document.getElementById('username');
+			var output = document.getElementById('output');
+
+			username.onblur = function(){
+				// 先获取输入的用户名
+				var _username = username.value;
+
+				// 创建异步请求对象
+				var xhr = new XMLHttpRequest();
+
+
+				// 接收数据并处理
+				xhr.onreadystatechange = function(){
+					if(xhr.readyState === 4){
+						if(xhr.responseText == 'true'){
+							output.innerHTML = '太好了，现在可以注册了';
+							output.className = 'success';
+						}else{
+							output.innerHTML = '你输入的名字太帅了，很多人都喜欢，换一个吧';
+							output.className = 'error';
+						}
+					}
+				}
+
+				// 建立于服务器的连接
+				xhr.open('get','/ajax/checkname?regname='+_username,true);
+
+				// 发送请求
+				xhr.send();
+			}
+		}
+	</script>
+</head>
+<body>
+	<h1>判断用户名是否被注册</h1>
+	<label for="username">用户名：</label>
+	<input type="text" id="username">
+	<div id="output"></div>
+</body>
+</html>

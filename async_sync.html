@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>首页</title>
+	<script>
+	
+		var xhr = new XMLHttpRequest();
+
+		xhr.onreadystatechange = function(){
+			if(xhr.readyState === 4){
+				var p = document.createElement('p');
+				p.innerHTML = xhr.responseText;
+				document.body.appendChild(p);
+				console.log('ajax完成');
+			}
+		}
+
+		// 异步:第三个参数设置为true ==> loaded => ajax完成
+		// 同步：第三个参数设置为false ==> ajax完成 => loaded
+		xhr.open('get','http://localhost:3000/ajax/ajaxtext',true);
+		xhr.send();
+
+		console.log('loaded');
+	</script>
+</head>
+<body>
+	<h1>我的主页，我做主</h1>
+</body>
+</html>

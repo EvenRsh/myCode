@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>百度音乐</title>
+	<script>
+		/* 
+		API：http://tingapi.ting.baidu.com/v1/restserver/ting
+		1）列表：
+          method=baidu.ting.billboard.billList&type=1&size=10&offset=0
+          参数： type = 1-新歌榜,2-热歌榜,11-摇滚榜,12-爵士,16-流行,21-欧美金曲榜,22-经典老歌榜,23-情歌对唱榜,24-影视金曲榜,25-网络歌曲榜
+          size = 10 //返回条目数量
+          offset = 0 //获取偏移
+
+
+        2）播放：
+        method=baidu.ting.song.play&songid=877578
+
+        */
+
+         /*var xhr = new XMLHttpRequest();
+
+         xhr.open('get','http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.billboard.billList&type=1&size=10&offset=0',true);
+
+         xhr.send();*/
+
+         function getData(data){
+         	var songlist = document.getElementById('songlist');
+
+         	console.log(data);
+
+         	var ul = document.createElement('ul');
+         	data.song_list.forEach(function(item,idx){
+         		var li = document.createElement('li');
+         		li.setAttribute('songid',item.song_id);
+         		li.innerHTML = '<img src="'+item.pic_small+'"/><h4>' + item.title + '</h4><p>歌手：' + item.artist_name + '</p><p>语言：' + item.language + '</p><p>人气：' + item.hot + '</p>';
+
+         		ul.appendChild(li);
+         	});
+
+
+         	// 写入页面
+         	songlist.appendChild(ul);
+         }
+
+         function getSong(data){
+         	var player = document.getElementById('player');
+         	console.log(data)
+
+         	player.src = data.bitrate.file_link;
+         	player.play();
+         }
+
+         window.onload = function(){
+	         var script = document.createElement('script');
+	         script.src = 'http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.billboard.billList&type=23&size=20&offset=0&callback=getData';
+	         document.head.appendChild(script);
+
+
+	         var songlist = document.getElementById('songlist');
+	         
+
+	         // 点击播放
+	         songlist.onclick = function(e){
+	         	e = e || window.event;
+	         	var target = e.target || e.srcElement;
+
+	         	if(target.tagName.toLowerCase() === 'img'){
+	         		var songid = target.parentElement.getAttribute('songid');
+
+					var script = document.createElement('script');
+					script.src = 'http://tingapi.ting.baidu.com/v1/restserver/ting?method=baidu.ting.song.play&songid='+songid+'&callback=getSong';
+					document.head.appendChild(script);
+	         	}
+	         }
+         }
+
+	</script>
+</head>
+<body>
+	<h1></h1>
+	<div id="songlist"></div>
+	<audio id="player" controls></audio>
+</body>
+</html>

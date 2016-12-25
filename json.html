@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script type="text/javascript">
+			function getDate(data){
+				console.log(typeof data);
+//				console.log(data.name);
+
+				document.body.innerHTML = JSON.stringify(data);
+				console.log(typeof JSON.stringify(data));
+			}
+			var script= document.createElement("script")
+			script.src = 'http://localhost:3001/ajax/getJSONP?callback=getDate';
+			document.head.appendChild(script);
+			
+			
+			
+		</script>
+		<!--<script  src="http://localhost:3001/ajax/getJSONP?callback=getDate"></script>-->
+		
+	</head>
+	<body>
+		<h1>1</h1>
+	</body>
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			ul{
+				list-style: none;
+			}
+			ul li{
+				position: relative;
+			}
+			ul li span{
+				display: inline-block;
+				position: absolute;
+				width: 30px;
+				height: 30px;
+				line-height: 30px;
+				text-align: center;
+				border-radius:50%;
+			}
+			.comtcnt{
+				top: 0;
+				right: 40px;
+				background: #f60;
+			}
+			.likecnt{
+				top: 0;
+				right: 0px;
+				background: #f00;
+			}
+		</style>
+		<script type="text/javascript">
+			var xhr = new XMLHttpRequest();
+			
+			xhr.onreadystatechange = function(){
+				if(xhr.readyState === 4 && xhr.status === 200){
+					console.log(xhr.responseText);
+					var res = JSON.parse(xhr.responseText);
+					
+					var ul = document.createElement("ul");
+					//遍历res
+					for (var i=0; i<res.length; i++) {
+						var li = document.createElement("li");
+						var h4 = document.createElement("h4");
+						var p = document.createElement("p");
+						h4.innerHTML = res[i].username;
+						p.innerHTML = res[i].content;
+						var spanCom = document.createElement("span");
+						spanCom.className = 'comtcnt';
+						spanCom.innerHTML = res[i].comtcnt;
+						var spanLike = document.createElement("span");
+						spanLike.className = 'likecnt';
+						spanLike.innerHTML = res[i].likecnt;
+						li.appendChild(h4);
+						li.appendChild(p);
+						li.appendChild(spanCom);
+						li.appendChild(spanLike);
+						ul.appendChild(li);
+					}
+					document.body.appendChild(ul);
+				}
+			}
+			xhr.open("get",'http://localhost:3000/ajax/weibo',true);
+			xhr.send();
+			
+		</script>
+	</head>
+	<body>
+	</body>
+</html>

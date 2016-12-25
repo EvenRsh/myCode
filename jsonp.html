@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>jsonp请求</title>
+	<script>
+		/*var xhr = new XMLHttpRequest();
+		xhr.open('get','http://localhost:3001/ajax/weibo',true);
+		xhr.send();*/
+
+		/*
+			能引入外部文件的标签
+			<link href=""/>
+			<a href=""></a>
+			<img src="">
+			<script src=""><\/script>
+		 */
+		
+
+		/*// JSONP的工作原理
+			1、声明一个全局函数
+			2、把函数名传给其他服务器
+			3、其他服务接收到函数名后，调用这个函数，并把数据传给这个函数
+		*/
+		
+		// 在这怎么获取其他服务器的内容
+		// 怎么样获取气象局的信息
+
+		function getData(data){
+			console.log(data);
+
+			for(var key in data){
+
+			}
+
+
+			for(var i=0;i<data.length;i++){
+				
+			}
+		}
+
+	</script>
+	<script src="http://localhost:3001/js/test.js?callback=getData"></script>
+</head>
+<body>
+	
+</body>
+</html>
